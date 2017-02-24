@@ -1,0 +1,42 @@
+body{
+	width:100%;
+	max-width:980px;
+	margin:40px auto;
+	background: transparent url('../jazzgray.gif') repeat;
+}
+#input,#output	{
+	width:90%;
+	height:200px;
+	margin:auto;
+	display: block;
+}
+input{
+	display:block;
+	margin:20px auto;
+}
+p{
+	text-align: center;
+	display: block;
+	margin:5px auto;
+}
+#poem-button{
+	opacity:0;
+	width:100px;
+	height:30px;
+	background-color:green;
+	border:1px dashed black;
+	margin:20px auto;
+	display:block;
+	text-align:center;
+	padding:20px 10px 10px 10px;
+	transition:500ms all;
+}
+#poem-button:hover{
+	color:red;
+	background-color:blue;
+	border:5px solid yellow;
+	font-weight:900;
+}
+h1{
+	text-align: center;
+}

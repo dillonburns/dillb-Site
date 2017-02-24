@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<!-- Load the Paper.js library -->
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="dist/paper-full.js"></script>
+<!-- Define inlined PaperScript associate it with myCanvas -->
+<script type="text/javascript">
+
+    
+
+$(document).ready(function(e){
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d');
+    var winHeight;
+    var winWidth;
+    winHeight = $(window).innerHeight();
+    winWidth = $(window).innerWidth();
+    var factor = 0.75;
+    console.log(winHeight +" "+winWidth);
+    $("#myCanvas").width(winWidth*factor);
+    $("#myCanvas").height(winHeight*factor);
+    ctx.width = winWidth * factor;
+    ctx.height = winHeight * factor;
+    $(window).resize(function(e){
+        winHeight = $(window).innerHeight();
+        winWidth = $(window).innerWidth();
+        $("#myCanvas").width(winWidth*factor);
+        $("#myCanvas").height(winHeight*factor);
+        ctx.width = winWidth * factor;
+        ctx.height = winHeight * factor;
+    });
+});
+
+</script>
+<script type="text/paperscript" canvas="myCanvas">
+	var paths = [];
+	var path = new Path();
+
+	tool.minDistance = 5;
+		
+	function onMouseDown(event) {
+		// Create a new path and select it:
+		path = new Path();
+		var randColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+		path.strokeColor = randColor;
+	
+		// Add a segment to the path where
+		// you clicked:
+		path.add(event.point);
+	}
+	
+	function onMouseUp(event) {
+		path.add(event.point);
+		//path.smooth();
+		paths.push(path);
+	}
+	
+	function onMouseDrag(event) {
+		// Every drag event, add a segment
+		// to the path at the position of the mouse:
+		var newPoint = event.point;
+		var checkPoint;
+		var theseSegments = path.segments;
+		var webPath;
+		for(var i=0;i<theseSegments.length-1;i++){
+			checkPoint = theseSegments[i].point;
+			if(newPoint.getDistance(checkPoint) < 200 &&  checkPoint!=newPoint){
+				webPath = new Path();
+				webPath.strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+				webPath.add(newPoint);
+				webPath.add(checkPoint);
+				console.log("near");
+			}
+		}
+		path.add(newPoint);
+		
+	}
+	function onKeyDown(event) {
+	// When a key is pressed, set the content of the text item:
+		if(event.key == 'i'){
+			console.log(paths);
+			console.log(paths[0].segments);
+		}
+	}
+	
+	function onKeyUp(event) {
+		// When a key is released, set the content of the text item:
+		var key = event.key;
+	}
+	
+	function onFrame(event) {
+	// Each frame, change the fill color of the path slightly by
+	// adding 1 to its hue:
+		for(var i = 0;i < paths.length;i++){
+			paths[i].fillColor.hue += 1;
+	
+		}
+	}
+</script>
+
+</head>
+<body style="height:100%;display: flex;
+    justify-content: center;
+    align-items: center;">
+	<canvas id="myCanvas" width="500px" height="500px" style="display:block;border:5px double black;"></canvas>
+</body>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+
+</html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Rectangles Inc.</title>
+		<style>		
+		/*Main CSS*/
+			body { 
+				margin: 0; 
+				font-family: "brandon-grotesque",arial;
+			}
+			#c{
+				display:block;
+				margin: 20px auto 20px auto;
+				background-color:rgba(123,67,200,0.1);
+				border-radius: 5px;
+				box-shadow: 0px 0px 15px #888888;
+			}
+			#info ul{
+				list-style-type:none;
+				width: 1000px;
+				margin: auto;
+				margin-top: 10px; 
+				display: block;
+				padding: 0;
+				text-align: center;
+			}
+			#info ul li{
+				display: inline-block;
+				margin-left: 5%;
+				margin-right: 5%;
+				width: 20%;
+				font-size: 36px;
+				text-align: center;
+				font-weight: 300;
+			}
+			.indicator{
+				opacity:0;
+			   margin:50px auto;
+			   display:block;
+			   background-color:black;
+			   width:75px;
+			   height:6px;
+			   transform:rotate(45deg);
+			}
+			.indicator:after{
+			   content:'';
+			   display:block;
+			   background-color:black;
+			   width:75px;
+			   height:6px;
+			   transform:rotate(-90deg);
+			}
+			
+		/*Animations CSS*/
+			
+			@-webkit-keyframes spinInAnim {
+				0% {opacity: 0 ; width:0px; transform:rotate(0deg);}
+				75%{opacity:1; }
+				100% {opacity: 1; width: 75px; transform:rotate(405deg);}
+			}	
+			@keyframes spinInAnim {
+				0% {opacity: 0 ; width:0px; transform:rotate(0deg);}
+				75%{opacity:1; }
+				100% {opacity: 1; width: 75px;transform:rotate(405deg);}
+			}			
+			.spinIn{
+				-webkit-animation: spinInAnim 300ms ; /* Safari 4+ */
+				-moz-animation:    spinInAnim 300ms ; /* Fx 5+ */
+				-o-animation:      spinInAnim 300ms ; /* Opera 12+ */
+				animation:         spinInAnim 300ms ;
+				-webkit-animation-fill-mode: forwards; /* Chrome, Safari, Opera */
+				animation-fill-mode: forwards;
+				transition: 300ms all;
+				
+			}
+			.spinOut{
+				opacity:0;
+			}
+			
+			
+		/*Splash Screen CSS*/
+			
+			#overlay{
+				position:fixed;
+				top:0;
+				bottom:0;
+				left:0;
+				right:0;
+				background-color:rgba(255,255,255,0.93);
+				color:black;
+				font-size:24px;
+				font-weight:500;
+			}
+			.precontent a{
+				text-align: center;
+				display: block;
+				margin: 50px auto;
+				color: black;
+				text-decoration: none;
+				padding: 10px;
+				border: 1px solid black;
+				width: 250px;
+				box-shadow: 0px 0px 5px black;
+				background-color:white;
+				-webkit-transition: all 250ms cubic-bezier(1.000, 0.125, 0.380, 1); /* older webkit */
+				-webkit-transition: all 250ms cubic-bezier(1.000, 0.125, 0.380, 1.420); 
+				   -moz-transition: all 250ms cubic-bezier(1.000, 0.125, 0.380, 1.420); 
+					 -o-transition: all 250ms cubic-bezier(1.000, 0.125, 0.380, 1.420); 
+						transition: all 250ms cubic-bezier(1.000, 0.125, 0.380, 1.420); /* custom */
+
+				-webkit-transition-timing-function: cubic-bezier(1.000, 0.125, 0.380, 1); /* older webkit */
+				-webkit-transition-timing-function: cubic-bezier(1.000, 0.125, 0.380, 1.420); 
+				   -moz-transition-timing-function: cubic-bezier(1.000, 0.125, 0.380, 1.420); 
+					 -o-transition-timing-function: cubic-bezier(1.000, 0.125, 0.380, 1.420); 
+						transition-timing-function: cubic-bezier(1.000, 0.125, 0.380, 1.420); /* custom */
+			}
+			.precontent a:visited{
+				color:black;
+			}
+			.precontent a:hover{
+				color:white;
+				background-color:black;
+				-webkit-transform:skewX(-25deg);
+				-moz-transform:skewX(-25deg);
+				-o-transform:skewX(-25deg);
+				transform:skewX(-25deg);
+			}
+			.precontent p{
+				font-weight:500;
+			}
+			.precontent{
+				display:block;
+				width:800px;
+				margin:200px auto;
+				text-align:center;
+			}			
+			.precontent p:nth-child(1){
+				font-size:48px;
+			}
+			div.follow{
+				width:900px;
+				height:900px;
+				position:absolute;
+				z-index:-1;
+				
+				background-image: 
+				radial-gradient(
+				  white,
+				   rgba(255,255,255,0.95),
+				   rgba(255,255,255,0.5),
+				   rgba(255,255,255,0.1),
+				  transparent
+				);
+			}
+			
+			
+		</style>
+		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	</head>
+	
+	<!-- Main HTML Body -->
+	
+	<body>
+		<div id="overlay">
+			<div class="precontent">
+				<p>Dillon Burns &ndash; <span class="rectangle">Rectangle</span> Utility</p>
+				<p>Drag rectangles to move , use handle to resize.</p>
+				<a href='#'>Show me the parallellagrams.</a>
+			</div>
+			<div class="follow"></div>
+		</div>
+		
+		<canvas id="c" width="1000" height="600"></canvas>
+		
+		<div id="info">
+			<ul>
+				<li class="infobox" id="intersections">Intersections<div class="indicator"></div></li>
+				<li class="infobox" id="containments">Containments<div class="indicator"></div></li>
+				<li class="infobox" id="adjacents">Adjacencies<div class="indicator"></div></li>
+			</ul>
+		</div>
+		<script src="https://use.typekit.net/jwx4mdk.js"></script>
+		<script>try{Typekit.load({ async: true });}catch(e){}</script>
+	</body>
+
+	<script>
+
+		
+		// list of rectangles & a variable to hold the active rectangle (the one currently being manipulated)
+		var rectangles = [	
+							{center:{x:200,y:200},width:120,height:100,color:"#006bb0"},
+							{center:{x:400,y:300},width:200,height:260,color:"#238ad0"}
+						];
+		var active;
+		
+		// checker vars
+		var intersections = containments = adjacents = isdragging = isresizing = false;
+		
+		// HTML5 Canvas vars
+		var canvas = document.getElementById("c");
+		var context = canvas.getContext("2d");
+		
+		//Mouse coordiante storing vars
+		var mousePos,mouseDownPos;
+		var oldx=0,oldy=0;
+		var overlayoldx=0,overlayoldy=0;
+		
+		
+		$(document).ready(function(e){
+			
+			$("#overlay a").click(function(e){
+				$("#overlay").fadeOut(500);
+			});
+			$("#overlay").on("mousemove",function(e){
+				//$('.precontent').css({'top': e.clientY, 'left': e.clientX });
+				$('.follow').css({'top': e.clientY - 450, 'left': e.clientX - 450});
+			});
+			
+			//initial rectangle draw
+			drawRectangles();
+			
+			//canvas mouse events
+			$("#c")
+			.mousedown(function(e){
+				
+				
+				
+				
+				isdragging = true;
+				mouseDownPos = getMousePos(canvas, e);
+				
+				rectangles = sortRectanglesByheight(rectangles);
+				
+				//checks if the mouse was clicked on the rectangle or the resizing handle
+				for(var i=0;i<rectangles.length;i++){
+					
+					//checks if mouse was clicked in a rectangle or a resizing handle, sets that rect to active and hides the cursor
+					if(mouseInHandle(rectangles[i],mouseDownPos)){
+						$('body').css('cursor', 'none');
+						isresizing = true;
+						active = rectangles[i];
+						break;
+					}
+					else if(mouseInRectangle(rectangles[i],mouseDownPos)){
+						$('body').css('cursor', 'none');
+						isresizing = false;
+						active = rectangles[i]; 
+						break;
+					}
+					
+				}
+				
+			}).mouseup(function(e){
+				
+				//end dragging , scaling , and clear active rectangle, show cursor again
+				isdragging = false;
+				isscaling = false;
+				active = null;
+				$('body').css('cursor', 'default');
+			
+			}).mousemove(function(e){
+				
+				mousePos = getMousePos(canvas, e);
+				
+				//if the mouse is dragging (down) and there is an active rectangle (a rectangle or resize handle was clicked on) then either move or scale the rectangle
+				if(isdragging && active!=null ){
+					if(!isresizing){
+						moveRect(active,mousePos.x,mousePos.y);
+					}else{
+						scaleRect(active,mousePos.x,mousePos.y);
+					}					
+					// Check for Intersections / Containments / Adjacents if there is a rectangle being manipulated
+					drawRectangles();
+					checkForIntersections(); 
+					checkForContainments();
+					checkForAdjacents();
+					updateInfoBox();
+				}
+				
+				
+				
+			});			
+			
+		});	
+		
+		//Sorts the rectangles by their height, so that the smaller rectangle is on top (enables you to click in a contained rectangle in certain situations in which it would be impossible)
+		function sortRectanglesByheight(rects){
+		
+			rects.sort(function(obj1, obj2) {
+				return ((obj1.width*obj1.height) - (obj2.width*obj2.height));
+			});
+			return rects;
+		}
+			
+		//sets the correct indications based on the rectangles
+		function updateInfoBox(){
+			
+			if(intersections){
+				//console.log("intersections");
+				$("#intersections .indicator").removeClass("spinOut");
+				$("#intersections .indicator").addClass("spinIn");
+			}else{
+				$("#intersections .indicator").addClass("spinOut");
+				$("#intersections .indicator").removeClass("spinIn");
+			}
+			if(containments){
+				$("#containments .indicator").removeClass("spinOut");
+				$("#containments .indicator").addClass("spinIn");
+			}else{
+				$("#containments .indicator").addClass("spinOut");
+				$("#containments .indicator").removeClass("spinIn");
+			}
+			if(adjacents){
+				$("#adjacents .indicator").removeClass("spinOut");
+				$("#adjacents .indicator").addClass("spinIn");
+				
+				var intersectionPoints = getIntersectionPoints(rectangles[0],rectangles[1]);
+				
+				var xchange = ychange = false;
+				var xinit = intersectionPoints[0].x;
+				var yinit = intersectionPoints[0].y;
+				var xcount = ycount = 0;
+				var weirdcase = false;
+				
+				for(var p=1;p<intersectionPoints.length;p++){
+					if(intersectionPoints[p].x != xinit){
+						xchange = true;
+						xcount++;
+					}
+					if(intersectionPoints[p].y != yinit){
+						ychange = true;
+						ycount++;
+					}
+				}
+				
+				if(ychange && xchange){
+					if((xcount == 1 && ycount !=1) || (ycount == 1 && xcount !=1)){
+						weirdcase = true;
+					}					
+				}
+				
+				if(!weirdcase){
+					$("#intersections .indicator").addClass("spinOut");
+					$("#intersections .indicator").removeClass("spinIn");
+				}
+				
+			}else{
+				$("#adjacents .indicator").addClass("spinOut");
+				$("#adjacents .indicator").removeClass("spinIn");
+			}
+			
+		}
+		
+		
+		//Main Intersection Check Loop
+		function checkForIntersections(){
+			intersections = false;
+			var intersectionPoints=[];
+			
+			//Temporary rectangle variables to hold the intersecting
+			var ir1,ir2;
+			
+			for(var i=0;i<rectangles.length;i++){
+				for(var p=0;p<rectangles.length;p++){
+					if(i!=p){
+						if(activeIntersects(rectangles[i],rectangles[p])){
+							//console.log("Intersection!");
+							intersections = true;
+							intersectionPoints = getIntersectionPoints(rectangles[i],rectangles[p]);
+							break;
+						}
+					}
+				}
+			}
+			
+			// Displays intersection points as circles with a radius of 5
+			if(intersectionPoints.length>0){
+				for(var p=0;p<intersectionPoints.length;p++){
+					context.beginPath();
+					context.arc(intersectionPoints[p].x, intersectionPoints[p].y, 5, 0, 2 * Math.PI, false);
+					context.fillStyle = 'green';
+					context.strokeStle = 'black';
+					context.fill();
+					context.stroke();	
+				}	
+			}			
+			
+		}
+		
+		
+		//Main Containment Check Loop
+		function checkForContainments(){
+			containments = false;
+			for(var i=0;i<rectangles.length;i++){
+				for(var p=0;p<rectangles.length;p++){
+					if(rectContains(rectangles[i],rectangles[p])){
+						containments = true;
+						//console.log("Containment!");
+						break;
+					}
+				}
+			}
+		}
+		
+		
+		//Main Adjacents Check Loop
+		function checkForAdjacents(){
+			adjacents = false;
+			for(var i=0;i<rectangles.length;i++){
+				for(var p=0;p<rectangles.length;p++){
+					if(i!=p){
+						if(rectAdjacent(rectangles[i],rectangles[p])){					
+							adjacents = true;
+							//console.log("Adjacent!");
+							break;	
+						}
+					}
+				}
+			}
+		}
+		
+		//Helper function for adjacents checking between 2 rectangles
+		function rectAdjacent(rect1,rect2){
+			
+			var xtouch = ytouch = false;
+			var xbreach = ybreach = false;
+			
+			var edges1 = getInfoFromRect(rect1);
+			var edges2 = getInfoFromRect(rect2);
+			
+			var adj = false;
+						
+			if(edges1.te == edges2.be || edges1.be == edges2.te || edges1.te == edges2.te || edges1.be == edges2.be){
+				ytouch = true;
+			}
+			
+			if(edges1.le == edges2.re || edges1.re == edges2.le || edges1.le == edges2.le || edges1.re == edges2.re){
+				xtouch = true;
+			}
+			if(!(edges1.re < edges2.le || edges1.le > edges2.re)){
+				xbreach = true;
+			}
+			if(!(edges1.be < edges2.te || edges1.te > edges2.be)){
+				ybreach=true;
+			}
+			if(xtouch && ybreach){
+				adj=true;
+			}	
+			if(ytouch && xbreach){
+				adj=true;
+			}			
+			
+			return(adj);
+			
+		} 
+		
+		
+		//Helper function for containment checking: checks if rectangle 1 contains rectangle 2
+		function rectContains(rect1,rect2){
+			
+			var inside = false;
+			
+			var edges1 = getInfoFromRect(rect1);
+			var edges2 = getInfoFromRect(rect2);
+			
+			if(edges1.te < edges2.te && edges1.be > edges2.be && edges1.re > edges2.re && edges1.le < edges2.le ){
+				//console.log("inside both");
+				inside = true;
+			}
+			
+			return inside;
+	
+		} 
+		
+		
+		//Helper function for intersection checking: checks between the active rectangle and another rectangle
+		function activeIntersects(rect1,rect2){
+			
+			var iptz = getIntersectionPoints(rect1,rect2);
+			if(iptz == 0){
+				return false;
+			}
+			
+			var xbreach = ybreach = false;
+			
+			var edges1 = getInfoFromRect(rect1);
+			var edges2 = getInfoFromRect(rect2);
+			
+			if(!(edges1.re < edges2.le || edges1.le > edges2.re)){
+				xbreach = true;
+			}
+			if(!(edges1.be < edges2.te || edges1.te > edges2.be)){
+				ybreach=true;
+			}
+			
+			return(xbreach && ybreach);
+			
+		}
+		
+		
+		//returns a list of the points of intersection between two rectangles, rect1/rect2 : first/second rectangle to compare
+		function getIntersectionPoints(rect1,rect2){
+			var points1 = getPointsInRect(rect1);
+			var points2 = getPointsInRect(rect2);
+			
+			var intersectionPoints = [];
+			
+			for(var p1=0;p1<points1.length;p1++){
+				for(var p2=0;p2<points2.length;p2++){
+					if(arePointsSame(points1[p1],points2[p2])){
+						intersectionPoints.push(points1[p1]);
+					}
+				}
+			}
+			
+			return intersectionPoints;
+	
+		}	
+		
+		//Helper function for getting intersection points, returns true if two points have the same coordinate values
+		function arePointsSame(point1,point2){
+			var same = false;
+			if(point1!=null || point2!=null){
+				if(point1.x == point2.x && point1.y == point2.y){
+					same = true;
+				}
+				if(Math.abs(point1.x-point2.x)<1 && Math.abs(point1.y-point2.y)<1){
+					same=true;
+				}
+			}
+			return same;
+		}
+		
+		// Helper function for getting intersection points, returns a list of the points in the rectangle
+		function getPointsInRect(rect){
+			
+			var points=[];
+			
+			var info = getInfoFromRect(rect);
+			
+			//adds points in top & bottom edge
+			for(var xpoints=info.le; xpoints<info.re; xpoints++){
+				points.push({x:xpoints,y:info.te});
+				points.push({x:xpoints,y:info.be});
+			}
+			
+			//add points in the left & right edge
+			for(var ypoints=info.te; ypoints<info.be; ypoints++){
+				points.push({x:info.le,y:ypoints});
+				points.push({x:info.re,y:ypoints});
+			}
+			
+			return points;
+			
+		}
+		
+		
+		//Returns a workable array of coordinate information about the corners and edges of the rectangle, rect: the rectangle the get the info of
+		function getInfoFromRect(rect){
+
+			//Corner points of the rectangle: top left, top right, bottom left, bottom right
+			var tl = { x : ((rect.center.x)-(rect.width/2)) , y : ((rect.center.y)-(rect.height/2)) };
+			var tr = { x : ((rect.center.x)+(rect.width/2)) , y : ((rect.center.y)-(rect.height/2)) };
+			var bl = { x : ((rect.center.x)-(rect.width/2)) , y : ((rect.center.y)+(rect.height/2)) };
+			var br = { x : ((rect.center.x)+(rect.width/2)) , y : ((rect.center.y)+(rect.height/2)) };
+			
+			//Edges of rectangle: top edge, left edge, bottom edge, right edge
+			var te = (rect.center.y)-(rect.height/2);
+			var le = (rect.center.x)-(rect.width/2 );
+			var be = (rect.center.y)+(rect.height/2);
+			var re = (rect.center.x)+(rect.width/2 );
+			
+			var info= {tl,tr,bl,br,  te,le,be,re};
+			return info;
+			
+		}
+		
+		 
+		// Draws the rectangle to the canvas, rect: the rectangle to draw
+		function drawRect(rect){
+			
+			var points = getInfoFromRect(rect);
+			
+			context.moveTo(points.tl.x, points.tl.y);		context.lineTo(points.tr.x, points.tr.y); // Top edge
+			context.moveTo(points.tr.x, points.tr.y);		context.lineTo(points.br.x, points.br.y); // Right edge
+			context.moveTo(points.br.x, points.br.y);		context.lineTo(points.bl.x, points.bl.y); // Bottom edge
+			context.moveTo(points.bl.x, points.bl.y);		context.lineTo(points.tl.x, points.tl.y); // Left edge
+			context.strokeStyle = "#000";
+			context.stroke();
+			
+			context.rect(points.br.x-20, points.br.y-20, 20, 20);
+			context.strokeStyle = rect.color;
+			context.stroke();
+			
+		}
+		
+		
+		//Scales the rectangle based on mouse movement, rect: rectangle to scale, newx: mouse X , newy: mouse Y
+		function scaleRect(rect,newx,newy){
+			
+			var points = getInfoFromRect(rect);
+			
+			var xdif = (newx - oldx);
+			var ydif = (newy - oldy);
+			
+			oldx = newx;
+			oldy = newy;
+			
+			var scaler = 20;
+			
+			if(xdif>0 && rect.width < 600){
+				rect.width+=scaler;
+			}
+			if(xdif<0 && rect.width > 60){
+				rect.width-=scaler;
+			}
+			if(ydif>0 && rect.height < 400){
+				rect.height+=scaler;
+			}
+			if(ydif<0 && rect.height > 60){
+				rect.height-=scaler;
+			}
+			
+		}
+	
+		//First clears the canvas, then loops through the list of rectangles and draws them back on to the canvas
+		function drawRectangles(){
+			canvas.width = canvas.width;
+			for(var i=0;i<rectangles.length;i++){
+				drawRect(rectangles[i]);
+			}
+		}
+		
+		//Checks whether the mouse is within the rectangle, rect: the rectangle to check, mousePos: the mouse position
+		function mouseInRectangle(rect,mousePos){
+			return (mousePos.x > rect.center.x-rect.width/2 && mousePos.x < rect.center.x+rect.width/2 && mousePos.y > rect.center.y-rect.height/2 && mousePos.y < rect.center.y+rect.height/2);
+		}
+		
+		//Checks whether the mouse is in the resizer handle, rect: rectangle to check, mousePos: mouse position
+		function mouseInHandle(rect,mousePos){
+			var inhandle = false;
+			if(mousePos.x > (rect.center.x+rect.width/2)-20 && mousePos.x < rect.center.x+rect.width/2 && mousePos.y > (rect.center.y+rect.height/2-20) && mousePos.y < rect.center.y+rect.height/2){
+				//console.log("In Handle!");
+				inhandle=true;
+			}
+			return inhandle;
+		}
+				
+		// Moves the rectangle to the coordinates, x: x coord, y: y coord
+		function moveRect(rect,x,y){
+			
+				rect.center.x=x;
+				rect.center.y=y;	
+		
+		}
+		
+		//Helper function for getting the correct mouse coordinates within the canvas element
+		function getMousePos(canvas, evt) {
+			var rect = canvas.getBoundingClientRect();
+			return {
+			  x: evt.clientX - rect.left,
+			  y: evt.clientY - rect.top
+			};
+		  }
+		
+	</script>
+		
+</html>

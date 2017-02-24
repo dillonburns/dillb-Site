@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>wobsite</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="steez.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+
+            var htmlements = [
+                {
+                    title: "content",
+                    wrapper: "html",
+                    attributes: [],
+                    elements: ["address", "article", "body", "footer", "header", "h1", "h2", "h3", "h4", "h5", "h6", "hgroup", "nav", "section"]
+                },
+                {
+                    title: "blocktext",
+                    wrapper: "",
+                    attributes: [],
+                    elements: ["dd", "div", "dl", "dt", "figcaption", "figure", "hr", "li", "main", "ol", "p", "pre", "ul"]
+                },
+                {
+                    title: "inlinetext",
+                    wrapper: "",
+                    attributes: [],
+                    elements: ["abbr", "b", "bdi", "bdo", "br", "cite", "code", "data", "dfn", "em", "i", "kbd", "mark", "q", "rp", "rt", "rtc", "ruby", "s", "samp", "small", "span", "strong", "sub", "sup", "time", "u", "var", "wbr", "del", "ins"]
+                },
+                {
+                    title: "media",
+                    wrapper: "",
+                    attributes: [],
+                    elements: ["area", "audio", "img", "map", "track", "video"]
+                },
+                {
+                    title: "embeded",
+                    wrapper: "",
+                    attributes: [],
+                    elements: ["embed", "iframe", "object", "param", "source"]
+                },
+                {
+                    title: "table",
+                    wrapper: "table",
+                    attributes: [],
+                    elements: ["caption", "col", "colgroup", "table", "tbody", "td", "tfoot", "th", "thead", "tr"]
+                },
+                {
+                    title: "form",
+                    wrapper: "form",
+                    attributes: [],
+                    elements: ["button", "datalist", "fieldset", "form", "input", "keygen", "label", "legend", "meter", "optgroup", "option", "output", "progress", "select", "textarea"]
+                },
+                {
+                    title: "rares",
+                    wrapper: "",
+                    attributes: [],
+                    elements: ["acronym", "applet", "basefont", "big", "blink", "center", "dir", "frame", "frameset", "isindex", "listing", "noembed", "plaintext", "spacer", "strike", "tt", "xmp"]
+                },
+	  //{title:"",wrapper:"",attributes:[],elements:[]}
+	  ];
+
+            var height = $(window).height();
+            var width = $(window).width();
+            var random_image_count = 0;
+
+
+            function random_site() {
+                for (var i = 0; i < 20; i++) {
+                    add_random_element(i);
+                }
+
+            }
+
+            $("html").css('background-image', 'url(' + get_random_image() + ')');
+
+
+            window.setInterval(random_site, 2500);
+
+
+            function add_random_element(i) {
+
+                var obj = get_random_element_obj();
+
+                var elname = get_random_element();
+
+                var el = document.createElement(elname);
+
+                document.body.appendChild(el);
+
+
+                var x = random_int(0, width);
+                var y = random_int(0, height);
+
+                $(el).attr("data-index", i);
+
+                if (obj.title == "blocktext" || obj.title == "inlinetext" || obj.title == "form" || obj.title == "table") {
+
+                    $(el).html(get_random_text(1000));
+                    $(el).css({
+                        "font-size": random_int(16, 64),
+                        "line-height": random_int(6, 64),
+                        "color": get_random_color()
+                    });
+
+                }
+                $(el).css({
+                    "position": "fixed",
+                    "top": y,
+                    "left": x,
+                    "width": random_int(100, 500),
+                    "height": random_int(100, 500),
+                    "border-width": random_int(1, 15),
+                    "border-color": get_random_color()
+                });
+            }
+
+            /*
+	  
+            *  HELPER FUNCTIONS
+	  
+            */
+
+            function get_random_color() {
+                return '#' + Math.floor(Math.random() * 16777215).toString(16);
+            }
+
+            function get_random_element() {
+                var element_type = htmlements[random_int(0, htmlements.length - 1)];
+                var element = element_type.elements[random_int(0, element_type.elements.length - 1)];
+                return element;
+            }
+
+            function get_random_element_obj() {
+                var element_obj = htmlements[random_int(0, htmlements.length - 1)];
+                return element_obj;
+            }
+
+            function get_random_element_from_type(type) {
+                var ind = 0;
+                for (var i = 0; i < htmlements.length; i++) {
+                    if (htmlements[i].title == type) {
+                        ind = i;
+                    }
+                }
+                return htmlements[ind].elements[random_int(0, htmlements[ind].elements.length - 1)];
+            }
+
+            function get_random_image() {
+                random_image_count++;
+                return "http://loremflickr.com/320/240/random?=" + random_image_count;
+            }
+
+            function get_random_text(amt) {
+                var text = "";
+                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]\\';/.,`~!########                                               $$$$$$$$$$$$$$";
+
+                for (var i = 0; i < amt; i++)
+                    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+                return text;
+            }
+
+            function random_int(min, max) {
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+        });
+    </script>
+
+</head>
+
+<body>
+    <div>
+    </div>
+</body>
+
+</html>

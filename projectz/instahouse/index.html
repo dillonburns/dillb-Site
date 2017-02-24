@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Instahouse</title>
+<style>
+html{
+	font-family:"proxima-nova";
+}
+	.instapic {
+		padding:15px;
+	}
+	.container{
+		width:980px;
+		margin-top:400px;
+		margin:auto;
+		text-align:center;
+	}
+	#txt{
+		display:block;
+		margin:auto;
+		
+	}
+	#enter{
+		margin:auto;
+		margin-top:20px;
+		display:block;
+	}
+	p{
+		width:400px;
+		font-weight:100;
+		font-style:italic;
+		margin:auto;
+		margin-top:20px;
+		font-size:16px;
+	}
+	h5{
+		margin:20px auto;
+		width:200px;
+	}
+</style>
+ <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script type="text/javascript">
+    $(document).ready(function(e) {
+		$(".desc").hide();
+		$("#txt").click(function(e){
+			$(this).html("");
+		});
+        $("#enter").click(function(e){
+			var tag = $("#txt").val().trim();
+			if(tag==""){
+				window.location.href = "wasd.html?c=housethatgrambuilt";
+			}
+			window.location.href = "wasd.html?c="+tag;
+			
+		});
+		$(document).keypress(function(event){
+		 
+			var keycode = (event.keyCode ? event.keyCode : event.which);
+			if(keycode == '13'){
+				if(tag==""){
+					window.location.href = "wasd.html?c=housethatgrambuilt";
+				}
+				window.location.href = "wasd.html?c="+tag;	
+			}
+		 
+		});
+		$("h5").mouseover(function(e){
+			$(".desc").fadeIn(100);
+		});
+		$("h5").mouseout(function(e){
+			$(".desc").fadeOut(100);
+		});
+    });
+</script>
+</head>
+
+<body>
+<div class="container">
+<h1>Instahouse</h1>
+<textarea id="txt">#EnterAnyTag (Without the hashtag)</textarea>
+<button id="enter">Enter</button>
+<h5>about the project</h5>
+<div class="desc">
+<p>
+Instahouse is a 3D environment with buildings textured with images from instagram. There are two main ways to utilize this space:</p>
+<p>
+1) By posting pictures with the tag #housethatgrambuilt, you can "build" the structures in real time. Upon entering the space you see the structures, constructed of images people have posted before. Images being posted with the tag will spawn and begin to rise, twist, and tumble whilst floating towards the sky. Upon refreshing the page, these new images will have become part of the collaborative structure.
+</p>
+<p>
+2) By selecting a popular instagram tag, you can construct an environment with the aesthetic nature of the images people post using that tag. Selecting an especially popular tag will result in many images spawning in real time, and flooding the environment with new images constantly.
+</p>
+<div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+[22-Jul-2015 17:06:22 America/Denver] PHP Parse error:  syntax error, unexpected 'file_put_contents' (T_STRING) in /home/admin/public_html/projects/wobsite/index.php on line 36

@@ -1,0 +1,29 @@
+html{
+font-family: 'Josefin Sans', sans-serif;
+}
+h1{
+color:#FFF;
+}
+body{
+}
+a{
+color:#FFF;
+}
+#about{
+	position: absolute;
+	right: 216px;
+	bottom: -11px;
+}
+#background{
+	display:block;
+	margin:auto auto;
+	border:none;
+	z-index:-100;
+}
+#maincollage{
+	background-color:#000;
+}
+#othercollage{
+	background-color:#F00;
+	font-family: 'Josefin Sans', sans-serif;
+}

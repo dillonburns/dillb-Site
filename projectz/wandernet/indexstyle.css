@@ -1,0 +1,161 @@
+#gmap{
+	margin: auto;
+border-radius: 2px;
+margin-bottom:10%;
+border-bottom-style:outset;
+border-color:white;
+border: 5px;
+}
+
+#mapdirt{
+	
+	margin:auto;
+	border-radius:2px;
+	margin-bottom:10%;
+	width:600px;
+	height:600px;
+	z-index:10;
+	
+}
+#gloading{
+position:absolute;
+right:3%;
+color:#006600;
+background-color:black;
+width:50px;
+text-wrap:supress;
+}
+
+#dirt
+{
+		overflow:hidden;
+	pointer-events:none;
+	position:absolute;
+	top:0;
+	left:25%;
+	background:url('http://i.imgur.com/TcrQ32m.png') repeat center center;
+	height:700px;
+	width:700px;
+	z-index:10;
+}
+
+body{
+	background-color:	#000;
+	color: white;
+	font-family: 'courier new', serif;
+}
+#glitch1{
+	left:20%;
+	top:1%;
+	position:absolute;
+	height:100%;
+	width: 9px;
+	background-color:white;
+	visibility:visible;
+	z-index:999;
+}
+#glitch1a{
+	left:20%;
+	top:1%;
+	position:absolute;
+	height:100%;
+	width: 9px;
+	background-color:white;
+	visibility:visible;
+	z-index:999;
+}#glitch1b{
+	left:20%;
+	top:1%;
+	position:absolute;
+	height:100%;
+	width: 9px;
+	background-color:white;
+	visibility:visible;
+	z-index:999;
+}#glitch1c{
+	left:20%;
+	top:1%;
+	position:absolute;
+	height:100%;
+	width: 9px;
+	background-color:white;
+	visibility:visible;
+	z-index:999;
+}
+#glitch1d{
+	left:20%;
+	top:1%;
+	position:absolute;
+	height:100%;
+	width: 9px;
+	background-color:black;
+	visibility:visible;
+	z-index:999;
+}
+#glitch1e{
+	left:20%;
+	top:1%;
+	position:absolute;
+	height:100%;
+	width: 9px;
+	background-color:black;
+	visibility:visible;
+	z-index:999;
+}
+#glitch2{
+	position:absolute;
+	right:30%;
+	top:40%;
+	color:white;
+	background-color:transparent;
+	z-index:-540;
+}
+#glitch3{
+color:white;
+background-color:black;
+
+}
+#logo{
+	position:absolute;
+height:250px;
+width:250px;
+right:10%;
+top:10%;
+}
+#title{
+	font-size:48px;
+	position:absolute;
+	
+	text-shadow:4px 0px 1px #000;
+	
+	font-family: 'Felix', serif;
+}
+#buttons{
+	margin:auto;
+	width:600px;
+	height:400px;
+}
+
+.btn {
+  -webkit-box-shadow: 4px 16px 0px #9e9e57;
+  -moz-box-shadow: 4px 16px 0px #9e9e57;
+  box-shadow: 4px 16px 0px #9e9e57;
+  font-family: Courier New;
+  color: #000000;
+  font-size: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 40px;
+  background: #b3b883;
+  text-decoration: none;
+}
+
+#garbageText{
+	z-index:-999
+	color:white;
+}
+
+.btn:hover {
+  background: #212121;
+  text-decoration: none;
+}

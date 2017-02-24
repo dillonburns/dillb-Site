@@ -1,0 +1,33 @@
+body#frontpage {
+  font-family: "Courier New";
+}
+
+body#frontpage a {
+  color: black;
+}
+
+body#frontpage a:visited {
+  color: black;
+}
+
+body#frontpage .container {
+  width: 1140px;
+  margin: auto;
+}
+
+body#frontpage .item {
+  font-weight: bold;
+  margin-top: 15px;
+  display: inline-block;
+}
+
+body#frontpage .item .desc {
+  display: none;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+body#frontpage #three {
+  width: 320px;
+  height: 200px;
+}
