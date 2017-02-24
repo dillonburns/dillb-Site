@@ -4,7 +4,7 @@ $(document).ready(function (e) {
 
 var animTime = 300;
 
-$(".about").mouseenter(function (e) {
+$(".about").click(function (e) {
     $("#center_blurb").fadeIn(animTime);
 });
 
